@@ -1,20 +1,6 @@
-import { createCanvas } from "canvas";
-
 export default function handler(req, res) {
-  const width = 520;
-  const height = 70;
-
-  const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext("2d");
-
-  ctx.clearRect(0, 0, width, height);
-
-  ctx.fillStyle = "#e60000";
-  ctx.beginPath();
-  ctx.roundRect(0, 0, width, height, 35);
-  ctx.fill();
-
   const now = new Date();
+
   const text = now.toLocaleString("en-US", {
     weekday: "long",
     day: "2-digit",
@@ -25,13 +11,32 @@ export default function handler(req, res) {
     second: "2-digit"
   });
 
-  ctx.fillStyle = "#ffffff";
-  ctx.font = "bold 22px Arial";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText(text, width / 2, height / 2);
+  const svg = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="520" height="70">
+    <rect
+      x="0"
+      y="0"
+      width="520"
+      height="70"
+      rx="35"
+      ry="35"
+      fill="#e60000"
+    />
+    <text
+      x="260"
+      y="44"
+      text-anchor="middle"
+      font-size="22"
+      font-weight="600"
+      fill="#ffffff"
+      font-family="Arial, Helvetica, sans-serif">
+      ${text}
+    </text>
+  </svg>
+  `;
 
-  res.setHeader("Content-Type", "image/png");
+  res.setHeader("Content-Type", "image/svg+xml");
   res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-  res.send(canvas.toBuffer("image/png"));
+  res.status(200).send(svg);
 }
+
