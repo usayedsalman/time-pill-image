@@ -1,0 +1,8 @@
+{
+  "name": "time-pill-image",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "canvas": "^2.11.2"
+  }
+}
